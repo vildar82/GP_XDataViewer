@@ -10,11 +10,24 @@ using Autodesk.AutoCAD.Runtime;
 using GP_XDataViewer.Model.XDataViewer;
 
 [assembly: CommandClass(typeof(GP_XDataViewer.Commands))]
+[assembly: ExtensionApplication(typeof(GP_XDataViewer.Commands))]
 
 namespace GP_XDataViewer
 {
-   public class Commands
+   public class Commands : IExtensionApplication
    {
+      public void Initialize()
+      {
+         var doc = Application.DocumentManager.MdiActiveDocument;
+         if (doc == null) return;
+         Editor ed = doc.Editor;
+         ed.WriteMessage("\nGP_XDataViewer загружена. Команда: GP-XDataShow");
+      }
+
+      public void Terminate()
+      {
+      }
+
       [CommandMethod("PIK", "GP-XDataShow", CommandFlags.Modal)]
       public void XDataShowCommand()
       {
